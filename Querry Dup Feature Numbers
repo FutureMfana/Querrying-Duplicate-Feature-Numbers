@@ -1,0 +1,14 @@
+gs.print(getDuplicates('sn_safe_feature','number')); // Assuming you have duplicate Incident Numbers
+function getDuplicates(tablename,val) {
+    var dupRecords = [];
+    var gaDupCheck = new GlideAggregate('sn_safe_feature');
+    gaDupCheck.addAggregate('COUNT',val);
+    gaDupCheck.addNotNullQuery(val);
+    gaDupCheck.groupBy(val);
+    gaDupCheck.addHaving('COUNT', '>', 1);
+    gaDupCheck.query();
+    while (gaDupCheck.next()) {
+        dupRecords.push(gaDupCheck[val].toString());
+    }
+    return dupRecords;
+}
